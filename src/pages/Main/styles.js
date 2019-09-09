@@ -1,4 +1,4 @@
-import styled, { keyframes, css} from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 export const Title = styled.h1`
   color: #fff;
