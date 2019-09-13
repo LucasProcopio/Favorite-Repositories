@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const Loading = styled.div`
   color: #fff;
@@ -40,6 +40,8 @@ export const Owner = styled.header`
     text-align: center;
     max-width: 400px;
   }
+
+  filter: ${props => props.filter === 'true' && 'blur(8px)'};
 `;
 
 export const IssueList = styled.ul`
@@ -100,4 +102,90 @@ export const IssueList = styled.ul`
       }
     }
   }
+
+  filter: ${props => props.filter === 'true' && 'blur(8px)'};
+`;
+
+export const Filter = styled.div`
+  position: absolute;
+  z-index: 10;
+  top: 5%;
+  right: -130px;
+  width: 125px;
+  height: 155px;
+  max-width: 50%;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  box-shadow: -4px 4px 6px #ccc;
+  transition: right 0.3s ease-in;
+
+  .open-close-btn {
+    position: absolute;
+    background: #fff;
+    width: 40px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 50%;
+    left: -20px;
+    color: #456990;
+    transform: translate(-50%, -50%);
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-left: 1px solid #456990;
+    border-top: 1px solid #456990;
+    border-bottom: 1px solid #456990;
+    cursor: pointer;
+    transition: all 0.2s linear;
+
+    &:hover {
+      color: #fff;
+      background: #456990;
+    }
+  }
+
+  ul {
+    list-style: none;
+
+    li {
+      color: #456990;
+      cursor: pointer;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      padding: 5px 10px;
+      button {
+        border: 0;
+        background: #fff;
+      }
+      & + li {
+        margin-top: 15px;
+      }
+    }
+  }
+
+  ${props =>
+    props.filter === 'true' &&
+    css`
+      right: 0;
+
+      ul > li {
+        transition: all 0.2s linear;
+        &:hover {
+          border: #456990 1px solid;
+        }
+      }
+      .open-close-btn {
+        box-shadow: -5px 2px 5px #ccc;
+        border: 0;
+        &:hover {
+          color: #456990;
+          background: #fff;
+        }
+      }
+    `}
 `;
