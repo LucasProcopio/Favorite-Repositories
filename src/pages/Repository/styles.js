@@ -22,7 +22,7 @@ export const Owner = styled.header`
   }
 
   a {
-    color: #7159c1;
+    color: #456990;
     font-size: 16px;
     text-decoration: none;
   }
@@ -77,7 +77,7 @@ export const IssueList = styled.ul`
           color: #555;
 
           &:hover {
-            color: #7159c1;
+            color: #456990;
           }
         }
 

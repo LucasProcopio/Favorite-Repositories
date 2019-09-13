@@ -12,7 +12,7 @@ export default createGlobalStyle`
     }
 
     body {
-      background: #7159c1;
+      background: #456990;
       -webkit-font-smoothing: antialiased !important;
     }
 
@@ -25,5 +25,19 @@ export default createGlobalStyle`
     button {
       cursor: pointer;
     }
+  }
+
+  .Toastify__toast.error-toast {
+    background: #FF3366 ;
+    color: #f1f1f1 ;
+    border-radius: 4px ;
+    padding: 15px 10px;
+    font-weight: 600;
+    word-spacing: 1.2px;
+
+  }
+
+  .error-toast.Toastify__progress-bar--default{
+    background: none;
   }
 `;

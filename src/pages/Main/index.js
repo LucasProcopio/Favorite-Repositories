@@ -1,9 +1,11 @@
 import React from 'react';
 import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 import Container from '../../Components/Container';
 import { Form, SubmitButton, List } from './styles';
 import api from '../../services/api';
+import 'react-toastify/dist/ReactToastify.css';
 
 class Main extends React.Component {
   constructor(props) {
@@ -12,6 +14,7 @@ class Main extends React.Component {
       newRepo: '',
       repositories: [],
       loading: false,
+      addRepositoryError: false,
     };
   }
 
@@ -41,21 +44,50 @@ class Main extends React.Component {
     this.setState({ loading: true });
 
     const { newRepo, repositories } = this.state;
-    const response = await api.get(`/repos/${newRepo}`);
+    const duplicateRepoError = 'Repository already exists';
+    const repoNotFoundError = 'Error adding the repository';
 
-    const data = {
-      name: response.data.full_name,
-    };
+    try {
+      repositories.map(repository => {
+        if (repository.name === newRepo) {
+          throw new Error(duplicateRepoError);
+        }
+        return false;
+      });
 
-    this.setState({
-      repositories: [...repositories, data],
-      newRepo: '',
-      loading: false,
-    });
+      const response = await api.get(`/repos/${newRepo}`);
+      const data = {
+        name: response.data.full_name,
+      };
+
+      this.setState({
+        repositories: [...repositories, data],
+        newRepo: '',
+        loading: false,
+        addRepositoryError: false,
+      });
+    } catch (err) {
+      this.setState({
+        loading: false,
+        addRepositoryError: true,
+      });
+
+      err.message =
+        err.message === duplicateRepoError ? err.message : repoNotFoundError;
+      this.notifyError(err.message);
+    }
   };
 
+  notifyError = message =>
+    toast(message, {
+      position: toast.POSITION.TOP_LEFT,
+      className: 'error-toast',
+      hideProgressBar: true,
+      autoClose: 2500,
+    });
+
   render() {
-    const { newRepo, repositories, loading } = this.state;
+    const { newRepo, repositories, loading, addRepositoryError } = this.state;
     return (
       <Container>
         <h1>
@@ -63,14 +95,17 @@ class Main extends React.Component {
           Repositories
         </h1>
 
-        <Form onSubmit={this.handleSubmit}>
+        <Form
+          onSubmit={this.handleSubmit}
+          error={addRepositoryError.toString()}
+        >
           <input
             type="text"
             placeholder="Add repository"
             value={newRepo}
             onChange={this.handleInputChange}
           />
-          <SubmitButton loading={loading}>
+          <SubmitButton loading={loading.toString()}>
             {loading ? (
               <FaSpinner color="#FFF" size={14} />
             ) : (
@@ -89,6 +124,7 @@ class Main extends React.Component {
             </li>
           ))}
         </List>
+        <ToastContainer />
       </Container>
     );
   }
