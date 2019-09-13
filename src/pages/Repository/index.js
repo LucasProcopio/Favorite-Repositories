@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
-import { Loading, Owner, IssueList } from './styles';
+import { Owner, IssueList } from './styles';
 import Container from '../../Components/Container';
 import Skeleton from '../../Components/Skeleton';
 
@@ -42,12 +42,11 @@ class Repository extends React.Component {
     const { repository, issues, loading } = this.state;
 
     if (loading) {
-      return <Loading>Carregango</Loading>;
+      return <Skeleton />;
     }
 
     return (
       <>
-        <Skeleton />
         <Container>
           <Owner>
             <Link to="/">Back to repositories</Link>

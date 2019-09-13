@@ -44,10 +44,18 @@ class Main extends React.Component {
     this.setState({ loading: true });
 
     const { newRepo, repositories } = this.state;
+    const duplicateRepoError = 'Repository already exists';
+    const repoNotFoundError = 'Error adding the repository';
 
     try {
-      const response = await api.get(`/repos/${newRepo}`);
+      repositories.map(repository => {
+        if (repository.name === newRepo) {
+          throw new Error(duplicateRepoError);
+        }
+        return false;
+      });
 
+      const response = await api.get(`/repos/${newRepo}`);
       const data = {
         name: response.data.full_name,
       };
@@ -64,7 +72,9 @@ class Main extends React.Component {
         addRepositoryError: true,
       });
 
-      this.notifyError('Error adding the repository please try again!');
+      err.message =
+        err.message === duplicateRepoError ? err.message : repoNotFoundError;
+      this.notifyError(err.message);
     }
   };
 
@@ -95,7 +105,7 @@ class Main extends React.Component {
             value={newRepo}
             onChange={this.handleInputChange}
           />
-          <SubmitButton loading={loading}>
+          <SubmitButton loading={loading.toString()}>
             {loading ? (
               <FaSpinner color="#FFF" size={14} />
             ) : (
