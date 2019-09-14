@@ -10,6 +10,25 @@ export const Loading = styled.div`
   height: 100vh;
 `;
 
+export const FilterTag = styled.div`
+  border-radius: 15px;
+  border: 1px solid #456990;
+  width: 70px;
+  height: 25px;
+  background: #fff;
+  color: #456990;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  &:hover {
+    background: #456990;
+    color: #fff;
+  }
+  transition: all 0.2s ease-in-out;
+`;
+
 export const Owner = styled.header`
   display: flex;
   flex-direction: column;

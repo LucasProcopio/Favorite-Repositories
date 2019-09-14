@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FaFilter } from 'react-icons/fa';
+import { ToastContainer, toast } from 'react-toastify';
 import api from '../../services/api';
-import { Owner, IssueList, Filter } from './styles';
+import { Owner, IssueList, Filter, FilterTag } from './styles';
 import Skeleton from '../../Components/Skeleton';
 import Container from '../../Components/Container';
 
@@ -15,9 +16,13 @@ class Repository extends React.Component {
       issues: [],
       loading: true,
       filter: false,
+      filterType: 'all',
     };
   }
 
+  /**
+   * get repository issues
+   */
   async componentDidMount() {
     const { match } = this.props;
 
@@ -70,15 +75,25 @@ class Repository extends React.Component {
       this.setState({
         issues: filteredIssues.data,
         loading: false,
+        filterType: repoStatus,
       });
     } catch (err) {
-      // validade data here
-      console.log(err.message);
+      this.notifyError(
+        'Error while trying to apply the filter, please try again'
+      );
     }
   };
 
+  notifyError = message =>
+    toast(message, {
+      position: toast.POSITION.TOP_LEFT,
+      className: 'error-toast',
+      hideProgressBar: true,
+      autoClose: 2500,
+    });
+
   render() {
-    const { repository, issues, loading, filter } = this.state;
+    const { repository, issues, loading, filter, filterType } = this.state;
 
     if (loading) {
       return <Skeleton />;
@@ -131,8 +146,10 @@ class Repository extends React.Component {
             <h1>{repository.name}</h1>
             <p>{repository.description}</p>
           </Owner>
-
           <IssueList filter={filter.toString()}>
+            {filterType !== 'all' && (
+              <FilterTag alt="Applied filter">{filterType}</FilterTag>
+            )}
             {issues.map(issue => (
               <li key={String(issue.id)}>
                 <img src={issue.user.avatar_url} alt={issue.user.login} />
@@ -148,6 +165,7 @@ class Repository extends React.Component {
               </li>
             ))}
           </IssueList>
+          <ToastContainer />
         </Container>
       </>
     );
