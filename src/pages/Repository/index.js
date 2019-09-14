@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { FaFilter } from 'react-icons/fa';
+import { ToastContainer, toast } from 'react-toastify';
 import api from '../../services/api';
-import { Owner, IssueList } from './styles';
-import Container from '../../Components/Container';
+import { Owner, IssueList, Filter, FilterTag } from './styles';
 import Skeleton from '../../Components/Skeleton';
+import Container from '../../Components/Container';
 
 class Repository extends React.Component {
   constructor(props) {
@@ -13,13 +15,19 @@ class Repository extends React.Component {
       repository: {},
       issues: [],
       loading: true,
+      filter: false,
+      filterType: 'all',
     };
   }
 
+  /**
+   * get repository issues
+   */
   async componentDidMount() {
     const { match } = this.props;
 
     const repositoryName = decodeURIComponent(match.params.repository);
+    this.repoName = repositoryName;
 
     const [repository, issues] = await Promise.all([
       api.get(`/repos/${repositoryName}`),
@@ -38,8 +46,54 @@ class Repository extends React.Component {
     });
   }
 
+  /**
+   * Open Filter tab
+   */
+  openFilter = () => {
+    const { filter } = this.state;
+    this.setState({ filter: !filter });
+  };
+
+  /**
+   * Apply issue filter
+   */
+  setIssueFilter = async repoStatus => {
+    const lowerCaseRepoName = this.repoName.toLowerCase();
+    const { filter } = this.state;
+    this.setState({ filter: !filter, loading: true });
+
+    try {
+      const filteredIssues = await api.get(
+        `/repos/${lowerCaseRepoName}/issues?state=${repoStatus}`,
+        {
+          params: {
+            per_page: 5,
+          },
+        }
+      );
+
+      this.setState({
+        issues: filteredIssues.data,
+        loading: false,
+        filterType: repoStatus,
+      });
+    } catch (err) {
+      this.notifyError(
+        'Error while trying to apply the filter, please try again'
+      );
+    }
+  };
+
+  notifyError = message =>
+    toast(message, {
+      position: toast.POSITION.TOP_LEFT,
+      className: 'error-toast',
+      hideProgressBar: true,
+      autoClose: 2500,
+    });
+
   render() {
-    const { repository, issues, loading } = this.state;
+    const { repository, issues, loading, filter, filterType } = this.state;
 
     if (loading) {
       return <Skeleton />;
@@ -48,7 +102,42 @@ class Repository extends React.Component {
     return (
       <>
         <Container>
-          <Owner>
+          <Filter filter={filter.toString()}>
+            <button
+              type="button"
+              onClick={this.openFilter}
+              className="open-close-btn"
+            >
+              <FaFilter size={15} />
+            </button>
+            <ul>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => this.setIssueFilter('all')}
+                >
+                  All
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => this.setIssueFilter('open')}
+                >
+                  Open
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => this.setIssueFilter('closed')}
+                >
+                  Closed
+                </button>
+              </li>
+            </ul>
+          </Filter>
+          <Owner filter={filter.toString()}>
             <Link to="/">Back to repositories</Link>
             <img
               src={repository.owner.avatar_url}
@@ -57,8 +146,10 @@ class Repository extends React.Component {
             <h1>{repository.name}</h1>
             <p>{repository.description}</p>
           </Owner>
-
-          <IssueList>
+          <IssueList filter={filter.toString()}>
+            {filterType !== 'all' && (
+              <FilterTag alt="Applied filter">{filterType}</FilterTag>
+            )}
             {issues.map(issue => (
               <li key={String(issue.id)}>
                 <img src={issue.user.avatar_url} alt={issue.user.login} />
@@ -74,6 +165,7 @@ class Repository extends React.Component {
               </li>
             ))}
           </IssueList>
+          <ToastContainer />
         </Container>
       </>
     );

@@ -18,7 +18,9 @@ class Main extends React.Component {
     };
   }
 
-  // Load localstorage data
+  /**
+   * Initialize state from localstorage data if any
+   */
   componentDidMount() {
     const repositories = localStorage.getItem('repositories');
 
@@ -27,6 +29,9 @@ class Main extends React.Component {
     }
   }
 
+  /**
+   * Uptades localstorage data if data changes
+   */
   componentDidUpdate(_, prevState) {
     const { repositories } = this.state;
 
