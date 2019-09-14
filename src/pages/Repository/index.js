@@ -203,6 +203,7 @@ class Repository extends React.Component {
           </IssueList>
           <PageControl disabled={page === 1}>
             <button
+              disabled={page === 1}
               onClick={() => this.handlePage('rem')}
               type="button"
               className="prev-button"

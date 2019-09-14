@@ -79,9 +79,20 @@ export const Owner = styled.header`
   }
 
   a {
+    border: 1px solid #456990;
+    background: #fff;
+    border-radius: 4px;
+    padding: 10px;
     color: #456990;
     font-size: 16px;
     text-decoration: none;
+
+    &:hover {
+      color: #fff;
+      background: #456990;
+    }
+
+    transition: all 0.2s ease-in-out;
   }
 
   h1 {
