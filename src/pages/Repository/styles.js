@@ -29,6 +29,44 @@ export const FilterTag = styled.div`
   transition: all 0.2s ease-in-out;
 `;
 
+export const PageControl = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  margin-top: 15px;
+
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #456990;
+    background: #fff;
+    color: #456990;
+    border-radius: 50%;
+    padding: 10px;
+
+    &:hover {
+      background: #456990;
+      color: #fff;
+    }
+    transition: all 0.2s ease-in-out;
+  }
+
+  .prev-button {
+    ${props =>
+      props.disabled &&
+      css`
+        border: 1px solid #777;
+        color: #777;
+        cursor: not-allowed;
+        &:hover {
+          background: #fff;
+          color: #777;
+        }
+      `}
+  }
+`;
+
 export const Owner = styled.header`
   display: flex;
   flex-direction: column;
@@ -41,9 +79,20 @@ export const Owner = styled.header`
   }
 
   a {
+    border: 1px solid #456990;
+    background: #fff;
+    border-radius: 4px;
+    padding: 10px;
     color: #456990;
     font-size: 16px;
     text-decoration: none;
+
+    &:hover {
+      color: #fff;
+      background: #456990;
+    }
+
+    transition: all 0.2s ease-in-out;
   }
 
   h1 {
@@ -74,6 +123,12 @@ export const IssueList = styled.ul`
     padding: 15px 10px;
     border: 1px solid #eee;
     border-radius: 4px;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      border: 1px solid #456990;
+      box-shadow: 0px 2px 4px #eee;
+    }
 
     & + li {
       margin-top: 10px;
