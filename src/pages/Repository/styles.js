@@ -51,6 +51,20 @@ export const PageControl = styled.div`
     }
     transition: all 0.2s ease-in-out;
   }
+
+  .prev-button {
+    ${props =>
+      props.disabled &&
+      css`
+        border: 1px solid #777;
+        color: #777;
+        cursor: not-allowed;
+        &:hover {
+          background: #fff;
+          color: #777;
+        }
+      `}
+  }
 `;
 
 export const Owner = styled.header`

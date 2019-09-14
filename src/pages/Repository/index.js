@@ -17,6 +17,7 @@ class Repository extends React.Component {
       loading: true,
       filter: false,
       filterType: 'all',
+      page: 1,
     };
   }
 
@@ -84,12 +85,32 @@ class Repository extends React.Component {
     }
   };
 
-  nextPage = () => {
-    console.log('next');
-  };
+  handlePage = async operator => {
+    const lowerCaseRepoName = this.repoName.toLowerCase();
+    let { page } = this.state;
+    this.setState({ loading: true });
 
-  prevPage = () => {
-    console.log('prev');
+    page = operator === 'add' ? page + 1 : page - 1;
+
+    try {
+      const issues = await api.get(
+        `/repos/${lowerCaseRepoName}/issues?page=${page}`,
+        {
+          params: {
+            per_page: 5,
+          },
+        }
+      );
+
+      this.setState({
+        issues: issues.data,
+        loading: false,
+        page,
+        filterType: 'all',
+      });
+    } catch (err) {
+      this.notifyError('Error trying to fetch the results, please try again');
+    }
   };
 
   notifyError = message =>
@@ -101,7 +122,14 @@ class Repository extends React.Component {
     });
 
   render() {
-    const { repository, issues, loading, filter, filterType } = this.state;
+    const {
+      repository,
+      issues,
+      loading,
+      filter,
+      filterType,
+      page,
+    } = this.state;
 
     if (loading) {
       return <Skeleton />;
@@ -173,11 +201,19 @@ class Repository extends React.Component {
               </li>
             ))}
           </IssueList>
-          <PageControl>
-            <button onClick={this.prevPage} type="button">
+          <PageControl disabled={page === 1}>
+            <button
+              onClick={() => this.handlePage('rem')}
+              type="button"
+              className="prev-button"
+            >
               <FaAngleLeft size={20} />
             </button>
-            <button onClick={this.nextPage} type="button">
+            <button
+              onClick={() => this.handlePage('add')}
+              type="button"
+              className="forw-button"
+            >
               <FaAngleRight size={20} />
             </button>
           </PageControl>
