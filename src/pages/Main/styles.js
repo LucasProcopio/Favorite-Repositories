@@ -72,8 +72,19 @@ export const List = styled.ul`
     }
 
     a {
-      color: #456990;
       text-decoration: none;
+      border: 1px solid #456990;
+      background: #fff;
+      border-radius: 4px;
+      padding: 7px;
+      color: #456990;
+
+      &:hover {
+        color: #fff;
+        background: #456990;
+      }
+
+      transition: all 0.2s ease-in-out;
     }
   }
 `;

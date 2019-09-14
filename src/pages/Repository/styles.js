@@ -123,6 +123,12 @@ export const IssueList = styled.ul`
     padding: 15px 10px;
     border: 1px solid #eee;
     border-radius: 4px;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      border: 1px solid #456990;
+      box-shadow: 0px 2px 4px #eee;
+    }
 
     & + li {
       margin-top: 10px;
