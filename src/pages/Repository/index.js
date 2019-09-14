@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { FaFilter } from 'react-icons/fa';
+import { FaFilter, FaAngleRight, FaAngleLeft } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import api from '../../services/api';
-import { Owner, IssueList, Filter, FilterTag } from './styles';
+import { Owner, IssueList, Filter, FilterTag, PageControl } from './styles';
 import Skeleton from '../../Components/Skeleton';
 import Container from '../../Components/Container';
 
@@ -82,6 +82,14 @@ class Repository extends React.Component {
         'Error while trying to apply the filter, please try again'
       );
     }
+  };
+
+  nextPage = () => {
+    console.log('next');
+  };
+
+  prevPage = () => {
+    console.log('prev');
   };
 
   notifyError = message =>
@@ -165,6 +173,14 @@ class Repository extends React.Component {
               </li>
             ))}
           </IssueList>
+          <PageControl>
+            <button onClick={this.prevPage} type="button">
+              <FaAngleLeft size={20} />
+            </button>
+            <button onClick={this.nextPage} type="button">
+              <FaAngleRight size={20} />
+            </button>
+          </PageControl>
           <ToastContainer />
         </Container>
       </>

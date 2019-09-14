@@ -29,6 +29,30 @@ export const FilterTag = styled.div`
   transition: all 0.2s ease-in-out;
 `;
 
+export const PageControl = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  margin-top: 15px;
+
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #456990;
+    background: #fff;
+    color: #456990;
+    border-radius: 50%;
+    padding: 10px;
+
+    &:hover {
+      background: #456990;
+      color: #fff;
+    }
+    transition: all 0.2s ease-in-out;
+  }
+`;
+
 export const Owner = styled.header`
   display: flex;
   flex-direction: column;
