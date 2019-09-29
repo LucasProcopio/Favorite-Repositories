@@ -13,6 +13,14 @@
 
 > This application is a study only pourpose, feel free to contribute you are more than welcome ;)
 
+---
+
+<p align="center">
+  <img src="public/images/fav-repos.gif" width="600">
+</p>
+
+---
+
 ## Install
 
 ```sh
