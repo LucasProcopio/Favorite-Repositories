@@ -16,7 +16,7 @@
 ---
 
 <p align="center">
-  <img src="public/images/fav-repos.gif" width="600">
+  <img src="public/images/fav-repos.gif" >
 </p>
 
 ---
